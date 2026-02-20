@@ -43,6 +43,19 @@ function makeRequest(
   return new Promise((resolve, reject) => {
     const parsed = new URL(url);
     const isHttps = parsed.protocol === "https:";
+    const isLocalhost =
+      parsed.hostname === "localhost" || parsed.hostname === "127.0.0.1";
+
+    // SECURITY: Enforce HTTPS for non-localhost servers
+    if (!isHttps && !isLocalhost) {
+      reject(
+        new Error(
+          `Refusing to send agent token over insecure HTTP to ${parsed.hostname}. Use HTTPS.`
+        )
+      );
+      return;
+    }
+
     const reqFn = isHttps ? httpsRequest : httpRequest;
 
     const options = {

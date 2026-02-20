@@ -1,5 +1,5 @@
-import { existsSync, readFileSync } from "fs";
-import { join } from "path";
+import { existsSync, readFileSync, lstatSync, realpathSync } from "fs";
+import { join, resolve } from "path";
 
 const TODO_FILES = [
   "TODO.md",
@@ -11,14 +11,28 @@ const TODO_FILES = [
   ".todo",
 ];
 
+const MAX_FILE_SIZE = 50_000; // 50KB — don't read huge files
+
 export function gatherTodos(cwd: string): string[] {
   const todos: string[] = [];
+  const resolvedCwd = resolve(cwd);
 
   for (const file of TODO_FILES) {
-    const filepath = join(cwd, file);
+    const filepath = join(resolvedCwd, file);
     if (!existsSync(filepath)) continue;
 
     try {
+      // SECURITY: Prevent symlink attacks — only read regular files
+      // that resolve within the project directory
+      const stat = lstatSync(filepath);
+      if (stat.isSymbolicLink()) continue;
+      if (!stat.isFile()) continue;
+      if (stat.size > MAX_FILE_SIZE) continue;
+
+      // Double-check the real path stays within the project
+      const realPath = realpathSync(filepath);
+      if (!realPath.startsWith(resolvedCwd)) continue;
+
       const content = readFileSync(filepath, "utf-8");
       const lines = content.split("\n");
 

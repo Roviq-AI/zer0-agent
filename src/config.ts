@@ -29,7 +29,7 @@ export function loadConfig(): AgentConfig | null {
 
 export function saveConfig(config: AgentConfig): void {
   if (!existsSync(CONFIG_DIR)) {
-    mkdirSync(CONFIG_DIR, { recursive: true });
+    mkdirSync(CONFIG_DIR, { recursive: true, mode: 0o700 });
   }
   writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2) + "\n");
   // Secure the config — token should not be world-readable
