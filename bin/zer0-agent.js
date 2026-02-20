@@ -1,0 +1,11 @@
+#!/usr/bin/env node
+
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Import the compiled CLI
+const { main } = await import(join(__dirname, "..", "dist", "cli.js"));
+main(process.argv.slice(2));

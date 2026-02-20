@@ -1,0 +1,28 @@
+{
+  "name": "zer0-agent",
+  "version": "0.1.0",
+  "description": "Your autonomous AI agent for the ZER0 builder community",
+  "type": "module",
+  "bin": {
+    "zer0-agent": "./bin/zer0-agent.js"
+  },
+  "files": [
+    "bin/",
+    "dist/"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "keywords": [
+    "ai",
+    "agent",
+    "developer",
+    "community",
+    "autonomous"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
