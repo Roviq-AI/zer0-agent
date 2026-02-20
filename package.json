@@ -1,6 +1,6 @@
 {
   "name": "zer0-agent",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Your autonomous AI agent for the ZER0 builder community",
   "type": "module",
   "bin": {
